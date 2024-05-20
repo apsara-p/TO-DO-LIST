@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <style>
+        p {
+  background-image: url('https://tse3.mm.bing.net/th?id=OIP.i0rOppSuREuzvziL2YaGUgHaE8&pid=Api&P=0&h=180');
+}
+      
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.search-container {
+    margin-bottom: 20px;
+}
+
+#weather-info {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather Dashboard</h1>
+        <div class="search-container">
+            <input type="text" id="location-input" placeholder="Enter location">
+            <button id="search-btn">Search</button>
+        </div>
+        <div id="weather-info">
+            <!-- Weather data will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for fetching weather data and updating the UI
+        // Add your JavaScript code here
+        document.getElementById("search-btn").addEventListener("click", function() {
+    var location = document.getElementById("location-input").value;
+    if(location) {
+        fetchWeather(location);
+    } else {
+        alert("Please enter a location.");
+    }
+});
+
+function fetchWeather(location) {
+    var apiKey = "YOUR_API_KEY"; // Replace with your OpenWeatherMap API key
+    var apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`;
+
+    fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+        if(data.cod === 200) {
+            displayWeather(data);
+        } else {
+            alert("Location not found. Please try again.");
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("An error occurred. Please try again later.");
+    });
+}
+
+function displayWeather(data) {
+    var weatherInfo = document.getElementById("weather-info");
+    weatherInfo.innerHTML = `
+        <h2>${data.name}, ${data.sys.country}</h2>
+        <p>Temperature: ${data.main.temp}°C</p>
+        <p>Description: ${data.weather[0].description}</p>
+        <p>Humidity: ${data.main.humidity}%</p>
+        <p>Wind Speed: ${data.wind.speed} m/s</p>
+    `;
+}
+
+    </script>
+</body>
+</html>
